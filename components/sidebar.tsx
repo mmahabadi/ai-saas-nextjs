@@ -14,7 +14,6 @@ import {
   VideoIcon,
 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import path from "path";
 
 const monserrat = Montserrat({ weight: "600", subsets: ["latin"] });
 
