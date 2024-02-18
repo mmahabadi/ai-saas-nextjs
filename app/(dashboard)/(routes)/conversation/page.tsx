@@ -1,18 +1,29 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { MessageSquare } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ChatCompletionMessageParam } from "openai/resources/index.mjs";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 
 import { formSchema } from "./constant";
 
-import Heading from "@/components/heading";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
+import UserAvatar from "@/components/user-avatar";
+import BotAvatar from "@/components/bot-avatar";
+import Empty from "@/components/empty";
+import Heading from "@/components/heading";
+import Loader from "@/components/loader";
 
 const ConversationPage = () => {
+  const router = useRouter();
+  const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -23,7 +34,27 @@ const ConversationPage = () => {
   const isLoading = form.formState.isSubmitting;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+    try {
+      const userMessage: ChatCompletionMessageParam = {
+        role: "user",
+        content: values.prompt,
+      };
+      const newMessages = [...messages, userMessage];
+
+      const response = await fetch("/api/conversation", {
+        method: "POST",
+        body: JSON.stringify({ messages: newMessages }),
+      });
+      const data = await response.json();
+
+      setMessages((current) => [...current, userMessage, data]);
+      form.reset();
+    } catch (error) {
+      //TODO: Open Pro Modal
+      console.log(error);
+    } finally {
+      router.refresh();
+    }
   };
 
   return (
@@ -64,7 +95,32 @@ const ConversationPage = () => {
             </form>
           </Form>
         </div>
-        <div className="space-y-4 mt-4">messages content</div>
+        <div className="space-y-4 mt-4">
+          {isLoading && (
+            <div className="p-8 rounded-lg w-full flex items-center justify-center bg-muted">
+              <Loader />
+            </div>
+          )}
+          {messages.length === 0 && !isLoading && (
+            <Empty label="No conversation started." />
+          )}
+          <div className="flex flex-col-reverse gap-y-4">
+            {messages.map((message: ChatCompletionMessageParam) => (
+              <div
+                key={message.content as string}
+                className={cn(
+                  "p-8 w-full flex items-start gap-x-8 rounded-lg",
+                  message.role === "user"
+                    ? "bg-white border border-black/10"
+                    : "bg-muted"
+                )}
+              >
+                {message.role === "user" ? <UserAvatar /> : <BotAvatar />}
+                <p className="text-sm">{message.content as string}</p>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
