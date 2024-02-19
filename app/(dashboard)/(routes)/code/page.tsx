@@ -63,8 +63,8 @@ const CodePage = () => {
         title="Code Generation"
         description="Generate code using descriptive text."
         icon={Code}
-        iconColor="text-green-700"
-        bgColor="bg-green-700/10"
+        iconColor="text-amber-400"
+        bgColor="bg-amber-400/10"
       />
       <div className="px-4 lg:px-8">
         <div>
@@ -102,7 +102,7 @@ const CodePage = () => {
             </div>
           )}
           {messages.length === 0 && !isLoading && (
-            <Empty label="No conversation started." />
+            <Empty image="code.gif" label="No conversation started." />
           )}
           <div className="flex flex-col-reverse gap-y-4">
             {messages.map((message: ChatCompletionMessageParam) => (

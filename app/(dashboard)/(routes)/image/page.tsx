@@ -68,8 +68,8 @@ const ImagePage = () => {
         title="Image Generation"
         description="Turn your prompt into an image."
         icon={ImageIcon}
-        iconColor="text-pink-700"
-        bgColor="bg-pink-700/10"
+        iconColor="text-red-400"
+        bgColor="bg-red-400/10"
       />
       <div className="px-4 lg:px-8">
         <div>
@@ -161,7 +161,7 @@ const ImagePage = () => {
             </div>
           )}
           {images.length === 0 && !isLoading && (
-            <Empty label="No images generated." />
+            <Empty image="image.gif" label="No images generated." />
           )}
           <div className="grid grid-cols-1 gap-4 mt-8">
             {images.map((src) => (
