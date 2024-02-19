@@ -155,11 +155,7 @@ const ImagePage = () => {
           </Form>
         </div>
         <div className="space-y-4 mt-4">
-          {isLoading && (
-            <div className="p-20">
-              <Loader />
-            </div>
-          )}
+          {isLoading && <Loader />}
           {images.length === 0 && !isLoading && (
             <Empty image="image.gif" label="No images generated." />
           )}

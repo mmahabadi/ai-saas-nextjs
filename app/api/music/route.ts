@@ -43,7 +43,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json(response);
   } catch (error) {
-    console.log("[Music_ERROR]", error);
+    console.log("[MUSIC_ERROR]", error);
     return new NextResponse("Internal Server Error", { status: 500 });
   }
 }
