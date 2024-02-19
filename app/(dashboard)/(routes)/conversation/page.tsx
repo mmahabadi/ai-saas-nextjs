@@ -45,8 +45,11 @@ const ConversationPage = () => {
         method: "POST",
         body: JSON.stringify({ messages: newMessages }),
       });
+      if (!response.ok) {
+        console.log("Error", response);
+        return;
+      }
       const data = await response.json();
-
       setMessages((current) => [...current, userMessage, data]);
       form.reset();
     } catch (error) {
