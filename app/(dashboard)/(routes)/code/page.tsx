@@ -20,10 +20,12 @@ import Empty from "@/components/empty";
 import Heading from "@/components/heading";
 import Loader from "@/components/loader";
 import ReactMarkdown from "react-markdown";
+import { useProModal } from "@/app/hooks/use-pro-modal";
 
 const CodePage = () => {
   const router = useRouter();
   const [messages, setMessages] = useState<ChatCompletionMessageParam[]>([]);
+  const { onOpen } = useProModal();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -46,12 +48,19 @@ const CodePage = () => {
         method: "POST",
         body: JSON.stringify({ messages: newMessages }),
       });
+
+      if (!response.ok) {
+        if (response?.status === 403) {
+          onOpen();
+        }
+        return;
+      }
+
       const data = await response.json();
 
       setMessages((current) => [...current, userMessage, data]);
       form.reset();
     } catch (error) {
-      //TODO: Open Pro Modal
       console.log(error);
     } finally {
       router.refresh();

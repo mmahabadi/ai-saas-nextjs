@@ -15,10 +15,12 @@ import Loader from "@/components/loader";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { useProModal } from "@/app/hooks/use-pro-modal";
 
 const MusicPage = () => {
   const router = useRouter();
   const [music, setMusic] = useState<string>();
+  const { onOpen } = useProModal();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -37,12 +39,19 @@ const MusicPage = () => {
         method: "POST",
         body: JSON.stringify(values),
       });
+
+      if (!response.ok) {
+        if (response?.status === 403) {
+          onOpen();
+        }
+        return;
+      }
+
       const data = await response.json();
 
       setMusic(data.audio);
       form.reset();
     } catch (error) {
-      //TODO: Open Pro Modal
       console.log(error);
     } finally {
       router.refresh();
