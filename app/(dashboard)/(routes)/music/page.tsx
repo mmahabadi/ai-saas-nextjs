@@ -16,6 +16,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useProModal } from "@/app/hooks/use-pro-modal";
+import { toast } from "react-hot-toast";
 
 const MusicPage = () => {
   const router = useRouter();
@@ -52,7 +53,7 @@ const MusicPage = () => {
       setMusic(data.audio);
       form.reset();
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong.");
     } finally {
       router.refresh();
     }

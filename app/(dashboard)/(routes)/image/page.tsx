@@ -25,6 +25,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useProModal } from "@/app/hooks/use-pro-modal";
+import { toast } from "react-hot-toast";
 
 const ImagePage = () => {
   const router = useRouter();
@@ -65,7 +66,7 @@ const ImagePage = () => {
 
       form.reset();
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong.");
     } finally {
       router.refresh();
     }

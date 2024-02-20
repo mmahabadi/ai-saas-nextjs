@@ -20,6 +20,7 @@ import Empty from "@/components/empty";
 import Heading from "@/components/heading";
 import Loader from "@/components/loader";
 import { useProModal } from "@/app/hooks/use-pro-modal";
+import { toast } from "react-hot-toast";
 
 const ConversationPage = () => {
   const router = useRouter();
@@ -57,7 +58,7 @@ const ConversationPage = () => {
       setMessages((current) => [...current, userMessage, data]);
       form.reset();
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong.");
     } finally {
       router.refresh();
     }

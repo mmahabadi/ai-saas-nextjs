@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils";
 import { Check, Zap } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { toast } from "react-hot-toast";
 
 const ProModal = () => {
   const { isOpen, onClose } = useProModal();
@@ -29,7 +30,7 @@ const ProModal = () => {
       const data = await response.json();
       window.location.href = data.url;
     } catch (error) {
-      console.log("STRIBE_CLIENT_ERROR", error);
+      toast.error("Something went wrong.");
     } finally {
       setLoading(false);
     }

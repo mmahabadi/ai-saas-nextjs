@@ -21,6 +21,7 @@ import Heading from "@/components/heading";
 import Loader from "@/components/loader";
 import ReactMarkdown from "react-markdown";
 import { useProModal } from "@/app/hooks/use-pro-modal";
+import { toast } from "react-hot-toast";
 
 const CodePage = () => {
   const router = useRouter();
@@ -61,7 +62,7 @@ const CodePage = () => {
       setMessages((current) => [...current, userMessage, data]);
       form.reset();
     } catch (error) {
-      console.log(error);
+      toast.error("Something went wrong.");
     } finally {
       router.refresh();
     }
