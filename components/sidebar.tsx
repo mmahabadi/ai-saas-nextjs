@@ -7,15 +7,16 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Route } from "@/types";
 import { routes } from "@/app/routes";
-import { FreeCounter } from "./Free-counter";
+import { FreeCounter } from "./free-counter";
 
 const monserrat = Montserrat({ weight: "600", subsets: ["latin"] });
 
 interface SidebarProps {
   apiLimitCount: number;
+  isPro: boolean;
 }
 
-const Sidebar = ({ apiLimitCount = 0 }: SidebarProps) => {
+const Sidebar = ({ apiLimitCount = 0, isPro = false }: SidebarProps) => {
   const pathname = usePathname();
   return (
     <div className="space-y-4 py-4 flex-col h-full bg-[#111827] text-white">
@@ -48,7 +49,7 @@ const Sidebar = ({ apiLimitCount = 0 }: SidebarProps) => {
           ))}
         </div>
       </div>
-      <FreeCounter apiLimitCount={apiLimitCount} />
+      <FreeCounter apiLimitCount={apiLimitCount} isPro={isPro} />
     </div>
   );
 };

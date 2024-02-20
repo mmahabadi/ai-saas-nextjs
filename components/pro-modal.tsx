@@ -16,9 +16,24 @@ import { Route } from "@/types";
 import { cn } from "@/lib/utils";
 import { Check, Zap } from "lucide-react";
 import { Button } from "./ui/button";
+import { useState } from "react";
 
 const ProModal = () => {
   const { isOpen, onClose } = useProModal();
+  const [loading, setLoading] = useState(false);
+
+  const onSubscribe = async () => {
+    try {
+      setLoading(true);
+      const response = await fetch("/api/stripe");
+      const data = await response.json();
+      window.location.href = data.url;
+    } catch (error) {
+      console.log("STRIBE_CLIENT_ERROR", error);
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent>
@@ -51,7 +66,13 @@ const ProModal = () => {
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
-          <Button size="lg" variant="premium" className="w-full">
+          <Button
+            onClick={onSubscribe}
+            size="lg"
+            variant="premium"
+            className="w-full"
+            disabled={loading}
+          >
             Upgrade
             <Zap className="w-4 h-4 ml-2 fill-white" />
           </Button>

@@ -1,7 +1,7 @@
 import { auth } from "@clerk/nextjs";
 import prismadb from "./prismadb";
 import { MAX_FREE_COUNTS } from "@/constants";
-import { NextResponse } from "next/server";
+import { checkSubscription } from "./subscription";
 
 export const increaseApiLimit = async () => {
   const { userId } = auth();
@@ -55,13 +55,16 @@ export const checkUserLimit = async () => {
   }
 
   const freeTrial = await checkApiLimit();
-  if (!freeTrial) {
+  const isPro = await checkSubscription();
+  if (!freeTrial && !isPro) {
     const error = new Error("You have reached the free trial limit");
     error.name = "403";
     throw error;
   }
 
-  increaseApiLimit();
+  if (!isPro) {
+    await increaseApiLimit();
+  }
 };
 
 export const getApiLimitCount = async () => {
