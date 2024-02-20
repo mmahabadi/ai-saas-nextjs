@@ -9,7 +9,7 @@ const configuration = {
 
 const openai = new OpenAI(configuration);
 
-export async function POST(req: NextApiRequest) {
+export async function POST(req: Request) {
   try {
     await checkUserLimit();
 
