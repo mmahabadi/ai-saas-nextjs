@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Route } from "@/types";
 import { routes } from "@/app/routes";
-import { FreeCounter } from "./free-counter";
+import { FreeCounter } from "@/components/free-counter";
 
 const monserrat = Montserrat({ weight: "600", subsets: ["latin"] });
 
